@@ -1,0 +1,25 @@
+{
+  "name": "MAC2NameMapperDecorator",
+  "version": "1.0.0-SNAPSHOT",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "salvullo/graylog-decorator-infnct-mac-name-mapper"
+  },
+  "scripts": {
+    "start": "./node_modules/.bin/webpack-dev-server",
+    "build": "./node_modules/.bin/webpack",
+    "lint": "./node_modules/.bin/eslint -c .eslintrc src/**/*"
+  },
+  "keywords": [
+    "graylog"
+  ],
+  "author": "salvullo <salvatore.monforte@ct.infn.it>",
+  "license": "MIT",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "webpack": "^1.12.2",
+    "graylog-web-plugin": "file:../graylog2-server/graylog2-web-interface/packages/graylog-web-plugin"
+  }
+}
