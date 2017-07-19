@@ -9,10 +9,10 @@ import org.graylog2.plugin.PluginConfigBean;
  */
 public class MAC2NameMapperDecoratorConfiguration implements PluginConfigBean {
 
-    @Parameter(value = "infnct_mac_name_mapper_file")
-    private String mapFileName = new String("/tmp/infnct-mac-name-map");
+    @Parameter(value = "infnct_mac_name_mapper_file", required = true)
+    private String mapFileName = "/etc/graylog/infnct-mac-name-map";
 
-    public String getMapFilename() {
+    public String getMapFileName() {
         return mapFileName;
     }
 }

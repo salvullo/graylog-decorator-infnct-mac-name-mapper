@@ -1,6 +1,7 @@
 package ced.infnct.graylog.decorator;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import com.google.inject.assistedinject.Assisted;
 import org.graylog2.decorators.Decorator;
 import org.graylog2.plugin.Message;
@@ -44,7 +45,11 @@ public class MAC2NameMapperDecorator implements SearchResponseDecorator {
         this.sourceField = (String) requireNonNull(decorator.config().get(CK_SOURCE_FIELD), CK_SOURCE_FIELD + " cannot be null");
         this.targetField = (String) requireNonNull(decorator.config().get(CK_TARGET_FIELD), CK_TARGET_FIELD + " cannot be null");
 
-        MAC_MAPPING = GSONUtils.deserializeImmutableMap(mapFilename);
+        MAC_MAPPING = Maps.transformEntries(
+                GSONUtils.deserializeImmutableMap(mapFilename),
+                (Maps.EntryTransformer<String, String, String>) (key, value) ->
+                        key.replaceAll("[-:]", "").toLowerCase()
+        );
     }
 
     @Override
@@ -57,18 +62,18 @@ public class MAC2NameMapperDecorator implements SearchResponseDecorator {
                     }
 
                     final String mac = String.valueOf(summary.message().get(sourceField)).
-                            replaceAll("[-]", ":").toLowerCase();
+                            replaceAll("[-:]", "").toLowerCase();
 
-                    final String apname = MAC_MAPPING.get(mac);
+                    final String name = MAC_MAPPING.get(mac);
 
                     // If we cannot map the severity we do not touch the message.
-                    if (apname == null) {
+                    if (name == null) {
                         return summary;
                     }
 
                     final Message message = new Message(ImmutableMap.copyOf(summary.message()));
 
-                    message.addField(targetField, apname);
+                    message.addField(targetField, name);
 
                     return summary.toBuilder().message(message.getFields()).build();
                 })
